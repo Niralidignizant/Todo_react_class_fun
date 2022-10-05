@@ -3,7 +3,7 @@ import React from "react";
 const Table = (props) => {
   return (
     <div className="showItems">
-      
+    
       {props.todo.map((elem) => {
         return (
           <div

@@ -8,11 +8,15 @@ class Formcl extends Component {
     this.state = {
       todos: [],
       value: "",
+      searchval: "",
       editing: false,
       currentid: "",
       currentValue: "",
     };
   }
+
+
+
   onChange = (e) => {
     this.setState({ value: e.target.value });
   };
@@ -27,17 +31,16 @@ class Formcl extends Component {
       this.setState({ todos: this.state.todos.concat(obj) });
       this.setState({ value: "" });
     }
+    localStorage.setItem('lists', JSON.stringify( this.state.todos))
   };
 
   onDeleteTask = (itemId) => {
- 
     this.setState({
       todos: [...this.state.todos].filter((id) => id.id !== itemId),
     });
   };
 
   onEditTodo = (id, newValue) => {
-    
     this.state.todos.map((todo) => {
       if (todo.id === id) {
         todo.name = newValue;
@@ -53,7 +56,6 @@ class Formcl extends Component {
   };
 
   onToggleEdit = (todo) => {
-  
     this.setState({ editing: true });
     this.setState({ currentid: todo.id });
     this.setState({ currentValue: todo.name });
@@ -63,7 +65,25 @@ class Formcl extends Component {
     this.setState({ currentValue: e.target.value });
   };
 
+  search = (e) => {
+    const val = e.target.value;
+    const todosValue = this.state.todos.filter(todo => {
+      return todo.name.toLowerCase().includes(val);
+    })
+    this.setState({
+      todos:todosValue , searchval:val
+    })
+
+ }
+
   render() {
+
+    // const {todos} = this.state
+
+    // localStorage.setItem('lists', JSON.stringify(todos))
+    // console.log("mylist---->",todos);
+
+    
     // const mylist = this.state.todos.map((todo, i) => (
     //   <li className="todo_item" key={i}>
     //     {todo.name}
@@ -81,6 +101,13 @@ class Formcl extends Component {
               <figcaption>Todo List</figcaption>
             </figure>
             <div className="addItems">
+              <input
+                type="text"
+                name="search"
+                value={this.state.searchval}
+                onChange={this.search}
+                placeholder="Search ToDo's"
+              />
               {this.state.editing === false ? (
                 <form onSubmit={this.onAddTask}>
                   <input
